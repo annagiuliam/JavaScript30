@@ -58,7 +58,29 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  
 
+  function playSound(e) {
+   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+   const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); // select key to animate
+        // is there an audio data with attribute "data-key" that equals the keycode of that event (e)?
+        if(!audio) return; // if no audio, stop function
+        audio.currentTime = 0; // rewind to the start (can be hit in succession)
+        audio.play();  // if there is audio, play it
+        key.classList.add('playing'); // add css class that makes it bigger
+        }
+
+    function removeTransition(e) {
+        if (e.propertyName !== "transform") return; //skip it if the event is not transform
+                                                      // otherwise it logs too much stuff
+        this.classList.remove("playing");              // this = the key also e.target (il target dell'event = key)
+    }                                                   // remove css class playing so the border is not highlighten anymore
+
+
+  const keys = document.querySelectorAll(".key"); // select all keys
+  keys.forEach(key => key.addEventListener("transitionend", removeTransition));  // for each key, at the end of transition, remove transition
+                                                                                  // we make the funtion removeTransition above
+  window.addEventListener("keydown", playSound);
 </script>
 
 
